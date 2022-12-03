@@ -2,14 +2,15 @@ const fs = require('fs');
 
 const file = fs.readFileSync('./01-01.txt');
 
-const myArray = file.toString().split('\r\n');
-const antElves = file.toString().split('\r\n');
+const caloriesOfElves = file.toString().split('\r\n');
+
+const entries = caloriesOfElves.length;
 let elves = [];
 let calories = 0;
 let actual = 0;
 
-for(let i = 0; i < myArray.length; i++){    
-    actual = Number(antElves.pop())
+for(let i = 0; i < entries; i++){    
+    actual = Number(caloriesOfElves.pop())
     calories = calories + actual;
     if(actual === 0){
         elves.push(calories);
@@ -17,17 +18,12 @@ for(let i = 0; i < myArray.length; i++){
     }
 }
 calories = 0;
-index = 0;
+
+elves.sort((a,b)=>a-b);
+
+console.log('Question 1: ', elves[elves.length-1]);
+
 for(let i = 0; i<3;i++){
-    index = elves.indexOf(Number(Math.max(...elves)));
-    calories += Number(Math.max(...elves));
-    console.log(elves.length);
-    elves.splice(index,1);
-    console.log(elves.length);
+    calories += elves[elves.length-1-i];
 }
-
-
-/*calories += elves.indexOf(Math.max(...elves)).pop();
-calories += elves.indexOf(Math.max(...elves)).pop();*/
-console.log(elves.reverse());
-console.log(calories);
+console.log('Question 2: ',calories);

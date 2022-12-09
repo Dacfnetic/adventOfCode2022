@@ -102,7 +102,7 @@ const buscarMaximoScenic = (arboletos) => {
       posiY = arbol.posY;
     }
   });
-  debugger;
+debugger;
   console.log(max, posiX,posiY);
 }
 

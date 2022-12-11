@@ -143,6 +143,3 @@ inspectedItems.splice(index,1);
 let max2 = Math.max(...inspectedItems)
 console.log(max2);
 console.log(max1 * max2);
-
-
-

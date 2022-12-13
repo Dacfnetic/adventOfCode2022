@@ -1,67 +1,41 @@
 const fs = require('fs');
-debugger;
-const datos = fs.readFileSync("./day13/13-13.txt", "utf-8").split('\r\n');
-const pares = [];
-let suma = 0;
-let estaEnOrden = true;
-let desordenado = 0;
-let prueba = datos[0];
-console.log(eval(prueba));
-
-
-const decodificar = () => {
-  for(let i = 0; i < datos.length; i++){
-    if(eval(datos[i]) !== undefined){
-      pares.push(eval(datos[i]));
+const input = fs.readFileSync('./day13/13-13.txt','utf-8').replace(/\r/g, "").trim();
+const datos = input.split('\n\n');
+const paresDeDatos = datos.map((pairPacket) => pairPacket.split('\n').map(JSON.parse));
+const comparar = (left, right) => {
+    if (typeof left === 'number' && typeof right === 'number'){
+      return left - right;
+    } 
+    if (typeof left === 'number') {
+        left = [left];
+    } else if (typeof right === 'number') {
+        right = [right];
     }
-  }
-}
-const verificar = (left,right) => {
-  if(typeof left === 'number' && typeof right === 'number'){
-    condicion1(left,right);
-  }
-  if(typeof left === 'object' && typeof right === 'object'){
-    condicion2(left,right);
-  }
-}
-
-const condicionGrande = (left,right) => {
-  if (left.length > right.length){
-    desordenado++;
-    return false;
-  }
-  if (left.length < right.length){
-    return true;
-  }
-  if (left.length === right.length){
-    for(let i = 0; i < left.length; i++){
-      return condicionGrande(left[i],right[i]);
+    for (let i = 0; i < left.length; i++) {
+        if (right[i] === undefined) {
+            return 1;
+        }
+        const c = comparar(left[i], right[i]);
+        if (c !== 0) {
+            return c;
+        }
     }
-  }
+    return left.length === right.length ? 0 : -1;
 }
-const condicion1 = (left,right) => {
-  if(left > right){
-    estaEnOrden = false;
-  }
+function parte1() {
+    const ordenados = paresDeDatos.map(([a, b], i) => {
+        return +(comparar(a, b) <= 0) * (i + 1);
+    });
+    console.log(ordenados.reduce((acc, currVal) => acc + currVal));
 }
-const condicion2 = (left,right) => {
-  
+function parte2() {
+    const dividerPackets = [[[2]], [[6]]];
+    const packets = paresDeDatos
+        .flat()
+        .concat(dividerPackets)
+        .sort(comparar);
+    const res = dividerPackets.map((d) => packets.indexOf(d) + 1).reduce((acc, n) => acc * n)
+    console.log(res);
 }
-const condicion3 = (left,right) => {
-  
-}
-const parte1 = () =>{
-  for(let i = 0; i < pares.length; i = i +2){
-    if(condicionGrande(pares[i],pares[i+1])){
-      let index = Math.ceil((i+1)/2);
-      suma += index;
-      console.log('por ahora ordenado');
-    }
-  }
-}
-decodificar();
 parte1();
-console.log(desordenado);
-console.log(suma);
-
-debugger;
+parte2();
